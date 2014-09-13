@@ -1,0 +1,28 @@
+[root]
+name = "Decision-Tree-ID3"
+version = "0.0.1"
+dependencies = [
+ "rust-csv 0.2.4 (git+https://github.com/BurntSushi/rust-csv#5c187653db6b7ca5be81e9412239107cd191ee17)",
+]
+
+[[package]]
+name = "quickcheck"
+version = "0.1.0"
+source = "git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece"
+dependencies = [
+ "quickcheck_macros 0.1.0 (git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece)",
+]
+
+[[package]]
+name = "quickcheck_macros"
+version = "0.1.0"
+source = "git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece"
+
+[[package]]
+name = "rust-csv"
+version = "0.2.4"
+source = "git+https://github.com/BurntSushi/rust-csv#5c187653db6b7ca5be81e9412239107cd191ee17"
+dependencies = [
+ "quickcheck 0.1.0 (git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece)",
+]
+
