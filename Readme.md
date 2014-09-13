@@ -10,9 +10,10 @@ curl https://static.rust-lang.org/rustup.sh | sudo bash
 ```
 Then get the project and build it:
 ```
-git clone https://github.com/drkwint/AI-Project
+git clone https://github.com/DrKwint/Decision-Tree-ID3.git
 cargo build
 ```
+
 #### Documentation
 HTML documentation can be built with rustdoc, i.e.
 ```
