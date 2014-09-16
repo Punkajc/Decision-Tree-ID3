@@ -7,22 +7,22 @@ dependencies = [
 
 [[package]]
 name = "quickcheck"
-version = "0.1.0"
-source = "git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece"
+version = "0.1.1"
+source = "git+git://github.com/BurntSushi/quickcheck#c5310f528ab3344f8373344f9b9566b40140f19e"
 dependencies = [
- "quickcheck_macros 0.1.0 (git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece)",
+ "quickcheck_macros 0.1.1 (git+git://github.com/BurntSushi/quickcheck#c5310f528ab3344f8373344f9b9566b40140f19e)",
 ]
 
 [[package]]
 name = "quickcheck_macros"
-version = "0.1.0"
-source = "git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece"
+version = "0.1.1"
+source = "git+git://github.com/BurntSushi/quickcheck#c5310f528ab3344f8373344f9b9566b40140f19e"
 
 [[package]]
 name = "rust-csv"
 version = "0.2.4"
 source = "git+https://github.com/BurntSushi/rust-csv#5c187653db6b7ca5be81e9412239107cd191ee17"
 dependencies = [
- "quickcheck 0.1.0 (git+git://github.com/BurntSushi/quickcheck#c5a719a3678938427c6ac5c4d9a499ece958dece)",
+ "quickcheck 0.1.1 (git+git://github.com/BurntSushi/quickcheck#c5310f528ab3344f8373344f9b9566b40140f19e)",
 ]
 

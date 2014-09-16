@@ -3,6 +3,7 @@ extern crate serialize;
 
 use std::path::Path;
 
+#[allow(dead_code)]
 #[deriving(Decodable)]
 struct Record {
     s1: String,
