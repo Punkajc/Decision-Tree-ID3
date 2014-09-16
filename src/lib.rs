@@ -1,15 +1,17 @@
+#[experimental]
+#[doc = "ID3 decision tree implementation"]
 pub mod id3 {
     use std::collections::HashMap;
 
+    #[doc = "A vertex in a decision tree."]
     pub enum ID3Vertex {
-        // Branch: Vertex at which the example set is split along an attribute.
-        // attribute name, values -> branches
+        /// Vertex at which the example set is split along an attribute.
         Branch(String, HashMap<String,ID3Vertex>),
-        // Leaf: Terminal vertex whose class has been decided
-        // class name
+        /// Terminal vertex whose class has been decided.
         Leaf(String),
     }
 
+    #[doc = "Trait for labeled data."]
     pub trait Record {
         fn get_attribute(&self, attr_name: &String) -> String;
     }
@@ -22,6 +24,7 @@ pub mod id3 {
         all_eq
     }
 
+    #[unstable]
     pub fn id3(examples: Vec<&Record>, label_attr_name: &String) -> Option<ID3Vertex> {
         let mut result = None;
 
