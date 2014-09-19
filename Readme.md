@@ -20,6 +20,14 @@ HTML documentation can be built with rustdoc, i.e.
 rustdoc src/lib.rs
 ```
 
+### Data
+Data is taken from the [UCI Machine Learning Repository](http://archive.ics.uci.edu/ml/).
+
+Currently bundled with:
+
+* [Congressional Voting Records](http://archive.ics.uci.edu/ml/datasets/Congressional+Voting+Records)
+* [Monks Problems](http://archive.ics.uci.edu/ml/datasets/MONK%27s+Problems)
+
 #### Dependencies
 * Rust - http://www.rust-lang.org/
 * Cargo - http://crates.io/
