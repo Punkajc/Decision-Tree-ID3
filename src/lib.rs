@@ -5,9 +5,9 @@ pub mod id3 {
     use std::f64;
 
     #[doc = "A vertex in a decision tree."]
-    pub enum ID3Vertex {
+    pub enum DecisionVertex {
         /// Vertex at which the example set is split along an attribute.
-        Branch(String, TreeMap<String,ID3Vertex>),
+        Branch(String, TreeMap<String,DecisionVertex>),
         /// Terminal vertex whose class has been decided.
         Leaf(String),
     }
@@ -19,21 +19,35 @@ pub mod id3 {
     }
 
     #[unstable]
-    pub fn id3(examples: Vec<&Record>, label_attr_name: &str) -> ID3Vertex {
-        // Return labeled leaf if all labels in examples are equal
-        if attr_all_eq(&examples, label_attr_name) {
-            return Leaf(label_attr_name.into_string());
+    #[doc = "
+    ID3 Decision Tree Algorithm
+
+    Recursively generates a decision tree from a dataset. [Wikipedia Link](http://en.wikipedia.org/wiki/ID3_algorithm)
+
+    # Arguments
+
+    * 'dataset' - The dataset to label or recursively split.
+    * 'label_attribute_name' - The name of the classification attribute.
+
+    # Safety Note
+
+    This is, in its present form, an incomplete and relatively untested implementation. It may fail unexpectedly. Do not use in a production setting.
+    "]
+    pub fn id3(dataset: Vec<&Record>, label_attribute_name: &str) -> DecisionVertex {
+        // Return labeled leaf if all labels in dataset are equal
+        if attr_all_eq(&dataset, label_attribute_name) {
+            return Leaf(label_attribute_name.into_string());
         }
 
         // Choose attribute to split on
         // Assumes split_attribute() is Some
-        let split_attr_name = split_attribute(&examples, label_attr_name).unwrap();
+        let split_attr_name = split_attribute(&dataset, label_attribute_name).unwrap();
         let mut branch_map = TreeMap::new();
 
-        let attr_domain: Vec<&str> = examples.iter().map(|x| (x.get_attribute(split_attr_name.as_slice()))).collect();
+        let attr_domain: Vec<&str> = dataset.iter().map(|x| (x.get_attribute(split_attr_name.as_slice()))).collect();
         for attr_value in attr_domain.iter() {
-            let example_subset: Vec<&Record> = examples.iter().filter(|x| x.get_attribute(split_attr_name.as_slice()) == *attr_value).map(|x| *x).collect();
-            let child_vertex = id3(example_subset, label_attr_name);
+            let example_subset: Vec<&Record> = dataset.iter().filter(|x| x.get_attribute(split_attr_name.as_slice()) == *attr_value).map(|x| *x).collect();
+            let child_vertex = id3(example_subset, label_attribute_name);
             branch_map.insert(attr_value.to_string(), child_vertex);
         }
         
