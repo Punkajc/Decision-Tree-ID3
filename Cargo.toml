@@ -4,5 +4,12 @@ name = "Decision-Tree-ID3"
 version = "0.0.1"
 authors = ["Gwendolyn Quint <DrKwint@gmail.com>"]
 
+[lib]
+name = "decision_tree"
+path = "src/lib.rs"
+test = true
+doctest = false
+doc = true
+
 [dependencies.rust-csv]
 git = "https://github.com/BurntSushi/rust-csv"
