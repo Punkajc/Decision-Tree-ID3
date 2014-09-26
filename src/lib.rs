@@ -1,10 +1,9 @@
-#[experimental]
-#[doc = "ID3 decision tree implementation"]
-pub mod id3 {
-    use std::collections::HashSet;
+#![crate_name = "decision_tree"]
+#![experimental]
+#![license = "MIT"]
+
+pub mod tree {
     use std::collections::TreeMap;
-    use std::str::eq_slice;
-    use std::f64;
 
     #[doc = "A vertex in a decision tree."]
     #[deriving(Show)]
@@ -14,12 +13,22 @@ pub mod id3 {
         /// Terminal vertex whose class has been decided.
         Leaf(String),
     }
-
+    
     #[doc = "Trait for labeled data."]
     pub trait Record {
         fn get_attribute(&self, attr_name: &str) -> &str;
         fn get_attribute_names(&self) -> Vec<&str>;
-    }
+    }    
+}
+
+#[experimental]
+#[doc = "ID3 decision tree implementation"]
+pub mod id3 {
+    use std::collections::HashSet;
+    use std::collections::TreeMap;
+    use std::str::eq_slice;
+    use std::f64;
+    use tree::{Record, DecisionVertex, Leaf, Branch};
 
     #[unstable]
     #[doc = "

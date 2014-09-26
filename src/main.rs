@@ -3,8 +3,10 @@ extern crate serialize;
 extern crate decision_tree;
 
 use std::path::Path;
-use decision_tree::id3;
+use std::rand::{task_rng, Rng};
+use decision_tree::{id3, tree};
 
+#[deriving(Clone)]
 struct VotingRecord {
     fields: Vec<String>,
 }
@@ -35,7 +37,7 @@ impl VotingRecord {
     }
 }
 
-impl id3::Record for VotingRecord {
+impl tree::Record for VotingRecord {
     fn get_attribute(&self, attr_name: &str) -> &str {
         let val = match attr_name {
             class_name => &self.fields[0],
@@ -69,7 +71,7 @@ impl id3::Record for VotingRecord {
     }
 }
 
-impl<'a> id3::Record for &'a VotingRecord {
+impl<'a> tree::Record for &'a VotingRecord {
     fn get_attribute(&self, attr_name: &str) -> &str {
         self.get_attribute(attr_name)
     }
@@ -84,7 +86,7 @@ fn main() {
     let fp = &Path::new("./data/voting-records/house-votes-84.data");
     let mut rdr = csv::Reader::from_file(fp);
     let rows = csv::collect(rdr.records()).unwrap();
-    let records = rows.map_in_place(|x| VotingRecord::new(x));
+    let mut records = rows.map_in_place(|x| VotingRecord::new(x));
     let attr_names = vec![handicapped,water_project,budget_resolution,
                           physician_freeze,el_salvador_aid,religious_schools,
                           anti_sattelite_ban,aid_to_contras,mx_missile,
@@ -92,8 +94,11 @@ fn main() {
                           right_to_sue,crime,duty_free_exports,
                           export_south_africa];
 
+    let mut rng = task_rng();
+    rng.shuffle(records.as_mut_slice());
+    let (test_slice, train_slice) = records.split_at_mut(30);
 
-    let root_vertex = id3::id3(records.iter().collect(), class_name, attr_names,0f64);
+    let root_vertex = id3::id3(train_slice.to_vec().iter().collect(), class_name, attr_names,0f64);
 
     println!("{}", root_vertex);
 }
