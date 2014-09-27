@@ -16,6 +16,11 @@ struct MonkRecord {
     fields: Vec<String>,
 }
 
+#[deriving(Clone)]
+struct ChessRecord {
+    fields: Vec<String>,
+}
+
 static SPACE: u8 = ' ' as u8;
 static class_name: &'static str = "class_name";
 // Voting Records attribute names
@@ -42,6 +47,43 @@ static a3: &'static str = "a3";
 static a4: &'static str = "a4";
 static a5: &'static str = "a5";
 static a6: &'static str = "a6";
+// chess attribute names
+static bkblk: &'static str = "bkblk";
+static bknwy: &'static str = "bknwy";
+static bkon8: &'static str = "bkon8";
+static bkona: &'static str = "bkona";
+static bkspr: &'static str = "bkspr";
+static bkxbq: &'static str = "bkxbq";
+static bkxcr: &'static str = "bkxcr";
+static bkxwp: &'static str = "bkxwp";
+static blxwp: &'static str = "blxwp";
+static bxqsq: &'static str = "bxqsq";
+static cntxt: &'static str = "cntxt";
+static dsopp: &'static str = "dsopp";
+static dwipd: &'static str = "dwipd";
+static "hdchk": &'static str = "hdchk";
+static "katri": &'static str = "katri";
+static "mulch": &'static str = "mulch";
+static "qxmsq": &'static str = "qxmsq";
+static "r2ar8": &'static str = "r2ar8";
+static "reskd": &'static str = "reskd";
+static "reskr": &'static str = "reskr";
+static "rimmx": &'static str = "rimmx";
+static "rkxwp": &'static str = "rkxwp";
+static "rxmsq": &'static str = "rxmsq";
+static "simpl": &'static str = "simpl";
+static "skach": &'static str = "skach";
+static "skewr": &'static str = "skewr";
+static "skrxp": &'static str = "skrxp";
+static "spcop": &'static str = "spcop";
+static "stlmt": &'static str = "stlmt";
+static "thrsk": &'static str = "thrsk";
+static "wkcti": &'static str = "wkcti";
+static "wkna8": &'static str = "wkna8";
+static "wknck": &'static str = "wknck";
+static "wkovl": &'static str = "wkovl";
+static "wkpos": &'static str = "wkpos";
+static "wtoeg": &'static str = "wtoeg";
 
 impl VotingRecord {
     fn new(fields: Vec<String>) -> VotingRecord {
@@ -54,6 +96,14 @@ impl VotingRecord {
 impl MonkRecord {
     fn new(fields: Vec<String>) -> MonkRecord {
         MonkRecord {
+            fields: fields,
+        }
+    }
+}
+
+impl ChessRecord {
+    fn new(fields: Vec<String>) -> ChessRecord {
+        ChessRecord {
             fields: fields,
         }
     }
@@ -116,6 +166,59 @@ impl tree::Record for MonkRecord {
    }
 }
 
+impl tree::Record for ChessRecord {
+    fn get_attribute(&self, attr_name: &str) -> &str {
+        let val = match attr_name {
+            bkblk => &self.fields[0],
+            bknwy => &self.fields[1],
+            bkon8 => &self.fields[2],
+            bkona => &self.fields[3],
+            bkspr => &self.fields[4],
+            bkxbq => &self.fields[5],
+            bkxcr => &self.fields[6],
+            bkxwp => &self.fields[7],
+            blxwp => &self.fields[8],
+            bxqsq => &self.fields[9],
+            cntxt => &self.fields[10],
+            dsopp => &self.fields[11],
+            dwipd => &self.fields[12],
+            hdchk => &self.fields[13],
+            katri => &self.fields[14],
+            mulch => &self.fields[15],
+            qxmsq => &self.fields[16],
+            r2ar8 => &self.fields[17],
+            reskd => &self.fields[18],
+            reskr => &self.fields[19],
+            rimmx => &self.fields[20],
+            rkxwp => &self.fields[21],
+            rxmsq => &self.fields[22],
+            simpl => &self.fields[23],
+            skach => &self.fields[24],
+            skewr => &self.fields[25],
+            skrxp => &self.fields[26],
+            spcop => &self.fields[27],
+            stlmt => &self.fields[28],
+            thrsk => &self.fields[29],
+            wkcti => &self.fields[30],
+            wkna8 => &self.fields[31],
+            wknck => &self.fields[32],
+            wkovl => &self.fields[33],
+            wkpos => &self.fields[34],
+            wtoeg => &self.fields[35],
+            class_name => &self.fields[36],
+            _ => {
+                println!("{}", attr_name); // print in case of error
+                &self.fields[109] // dirty, error throwing hack
+            },
+        };
+        val.as_slice()
+    }
+
+   fn get_attribute_names(&self) -> Vec<&str> {
+       vec!["bkblk","bknwy","bkon8","bkona","bkspr","bkxbq","bkxcr","bkxwp","blxwp","bxqsq","cntxt","dsopp","dwipd","hdchk","katri","mulch","qxmsq","r2ar8","reskd","reskr","rimmx","rkxwp","rxmsq","simpl","skach","skewr","skrxp","spcop","stlmt","thrsk","wkcti","wkna8","wknck","wkovl","wkpos","wtoeg"]
+   }
+}
+
 impl<'a> tree::Record for &'a VotingRecord {
     fn get_attribute(&self, attr_name: &str) -> &str {
         self.get_attribute(attr_name)
@@ -127,6 +230,16 @@ impl<'a> tree::Record for &'a VotingRecord {
 }
 
 impl<'a> tree::Record for &'a MonkRecord {
+    fn get_attribute(&self, attr_name: &str) -> &str {
+        self.get_attribute(attr_name)
+    }
+
+    fn get_attribute_names(&self) -> Vec<&str> {
+        self.get_attribute_names()
+    }
+}
+
+impl<'a> tree::Record for &'a ChessRecord {
     fn get_attribute(&self, attr_name: &str) -> &str {
         self.get_attribute(attr_name)
     }
