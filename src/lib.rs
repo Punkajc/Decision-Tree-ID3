@@ -4,6 +4,8 @@
 
 pub mod tree {
     use std::collections::TreeMap;
+    use std::str::eq_slice;
+
 
     #[doc = "A vertex in a decision tree."]
     #[deriving(Show)]
@@ -19,6 +21,20 @@ pub mod tree {
         fn get_attribute(&self, attr_name: &str) -> &str;
         fn get_attribute_names(&self) -> Vec<&str>;
     }    
+
+    pub fn test<T: Record>(tree_vertex: &DecisionVertex, test_case: &T, label_attribute_name: &str) -> bool {
+        match *tree_vertex {
+            Leaf(ref label) => eq_slice(label.as_slice(), test_case.get_attribute(label_attribute_name)),
+            Branch(ref label, ref children) => {
+                let test_attr: String = test_case.get_attribute(label.as_slice()).to_string();
+                let next_vertex: &DecisionVertex = match children.find(&test_attr) {
+                    Some(val) => val,
+                    None => return false,
+                };
+                test(next_vertex, test_case, label_attribute_name)
+            }
+        }
+    }
 }
 
 #[experimental]
@@ -51,12 +67,6 @@ pub mod id3 {
         if attr_all_eq(&dataset, label_attribute_name) {
             return Leaf(dataset.iter().next().unwrap().get_attribute(label_attribute_name).to_string());
         }
-
-        // IN PROGRESS
-        // Return labeled leaf if entropy of dataset is below threshold
-        //if entropy(&dataset, label_attribute_name) < entropy_theshold {
-            
-        //}
 
         // Choose attribute to split on
         // Assumes split_attribute() is Some
