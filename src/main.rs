@@ -61,29 +61,29 @@ static bxqsq: &'static str = "bxqsq";
 static cntxt: &'static str = "cntxt";
 static dsopp: &'static str = "dsopp";
 static dwipd: &'static str = "dwipd";
-static "hdchk": &'static str = "hdchk";
-static "katri": &'static str = "katri";
-static "mulch": &'static str = "mulch";
-static "qxmsq": &'static str = "qxmsq";
-static "r2ar8": &'static str = "r2ar8";
-static "reskd": &'static str = "reskd";
-static "reskr": &'static str = "reskr";
-static "rimmx": &'static str = "rimmx";
-static "rkxwp": &'static str = "rkxwp";
-static "rxmsq": &'static str = "rxmsq";
-static "simpl": &'static str = "simpl";
-static "skach": &'static str = "skach";
-static "skewr": &'static str = "skewr";
-static "skrxp": &'static str = "skrxp";
-static "spcop": &'static str = "spcop";
-static "stlmt": &'static str = "stlmt";
-static "thrsk": &'static str = "thrsk";
-static "wkcti": &'static str = "wkcti";
-static "wkna8": &'static str = "wkna8";
-static "wknck": &'static str = "wknck";
-static "wkovl": &'static str = "wkovl";
-static "wkpos": &'static str = "wkpos";
-static "wtoeg": &'static str = "wtoeg";
+static hdchk: &'static str = "hdchk";
+static katri: &'static str = "katri";
+static mulch: &'static str = "mulch";
+static qxmsq: &'static str = "qxmsq";
+static r2ar8: &'static str = "r2ar8";
+static reskd: &'static str = "reskd";
+static reskr: &'static str = "reskr";
+static rimmx: &'static str = "rimmx";
+static rkxwp: &'static str = "rkxwp";
+static rxmsq: &'static str = "rxmsq";
+static simpl: &'static str = "simpl";
+static skach: &'static str = "skach";
+static skewr: &'static str = "skewr";
+static skrxp: &'static str = "skrxp";
+static spcop: &'static str = "spcop";
+static stlmt: &'static str = "stlmt";
+static thrsk: &'static str = "thrsk";
+static wkcti: &'static str = "wkcti";
+static wkna8: &'static str = "wkna8";
+static wknck: &'static str = "wknck";
+static wkovl: &'static str = "wkovl";
+static wkpos: &'static str = "wkpos";
+static wtoeg: &'static str = "wtoeg";
 
 impl VotingRecord {
     fn new(fields: Vec<String>) -> VotingRecord {
@@ -253,15 +253,19 @@ impl<'a> tree::Record for &'a ChessRecord {
 fn main() {
     let fp_voting = &Path::new("./data/voting-records/house-votes-84.data");
     let fp_monk = &Path::new("./data/monks-problems/monks-1.train");
+    let fp_chess = &Path::new("./data/king-rook-vs-king-pawn/kr-vs-kp.data");
 
     let mut rdr_voting = csv::Reader::from_file(fp_voting);
     let mut rdr_monk = csv::Reader::from_file(fp_monk).delimiter(SPACE);
+    let mut rdr_chess = csv::Reader::from_file(fp_chess);
 
     let rows_voting = csv::collect(rdr_voting.records()).unwrap();
     let rows_monk = csv::collect(rdr_monk.records()).unwrap();
+    let rows_chess = csv::collect(rdr_chess.records()).unwrap();
 
     let mut records_voting = rows_voting.map_in_place(|x| VotingRecord::new(x));
     let mut records_monk = rows_monk.map_in_place(|x| MonkRecord::new(x));
+    let mut records_chess = rows_chess.map_in_place(|x| ChessRecord::new(x));
 
     let attr_names_voting = vec![handicapped,water_project,budget_resolution,
                           physician_freeze,el_salvador_aid,religious_schools,
@@ -270,25 +274,32 @@ fn main() {
                           right_to_sue,crime,duty_free_exports,
                           export_south_africa];
     let attr_names_monk = vec![a1, a2, a3, a4, a5, a6];
-    
+    let attr_names_chess = vec![bkblk,bknwy,bkon8,bkona,bkspr,bkxbq,bkxcr,bkxwp,blxwp,bxqsq,cntxt,dsopp,dwipd,hdchk,katri,mulch,qxmsq,r2ar8,reskd,reskr,rimmx,rkxwp,rxmsq,simpl,skach,skewr,skrxp,spcop,stlmt,thrsk,wkcti,wkna8,wknck,wkovl,wkpos,wtoeg];
+
     let mut rng = task_rng();
     rng.shuffle(records_voting.as_mut_slice());
     let (test_slice_voting, train_slice_voting) = records_voting.split_at_mut(30);
     rng.shuffle(records_monk.as_mut_slice());
     let (test_slice_monk, train_slice_monk) = records_monk.split_at_mut(30);
+    let (test_slice_chess, train_slice_chess) = records_chess.split_at_mut(30);
 
     let root_vertex_voting = id3::id3(train_slice_voting.to_vec().iter().collect(), class_name, attr_names_voting, 0f64);
     let root_vertex_monk = id3::id3(train_slice_monk.to_vec().iter().collect(), class_name, attr_names_monk, 0f64);
+    let root_vertex_chess = id3::id3(train_slice_chess.to_vec().iter().collect(), class_name, attr_names_chess, 0f64);
 
     let test_values_voting: Vec<bool> = test_slice_voting.iter().map(|x| tree::test(&root_vertex_voting, x, class_name)).collect();
     let test_values_monk: Vec<bool> = test_slice_monk.iter().map(|x| tree::test(&root_vertex_monk, x, class_name)).collect();
+    let test_values_chess: Vec<bool> = test_slice_chess.iter().map(|x| tree::test(&root_vertex_chess, x, class_name)).collect();
 
     let total_count_voting = test_values_voting.len();
     let total_count_monk = test_values_monk.len();
+    let total_count_chess = test_values_chess.len();
     let true_count_voting = test_values_voting.iter().filter(|x| **x).count();
     let true_count_monk = test_values_monk.iter().filter(|x| **x).count();
+    let true_count_chess = test_values_chess.iter().filter(|x| **x).count();
     let false_count_voting = total_count_voting - true_count_voting;
     let false_count_monk = total_count_monk - true_count_monk;
+    let false_count_chess = total_count_chess - true_count_chess;
 
     println!("Voting Records");
     println!("{}", root_vertex_voting);
@@ -304,4 +315,11 @@ fn main() {
     println!("correct: {}/30", true_count_monk);
     println!("incorrect: {}/30", false_count_monk);
 
+    println!("\n");
+
+    println!("King Rook vs King Pawn");
+    println!("{}", root_vertex_chess);
+    println!("");
+    println!("correct: {}/30", true_count_chess);
+    println!("incorrect: {}/30", false_count_chess);
 }
