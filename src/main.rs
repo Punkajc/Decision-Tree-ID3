@@ -141,6 +141,10 @@ impl tree::Record for VotingRecord {
              education_spending,right_to_sue,crime,duty_free_exports,
              export_south_africa]
     }
+
+    fn get_label(&self) -> &str {
+        self.fields[0].as_slice()
+    }
 }
 
 impl tree::Record for MonkRecord {
@@ -164,6 +168,10 @@ impl tree::Record for MonkRecord {
    fn get_attribute_names(&self) -> Vec<&str> {
        vec![a1, a2, a3, a4, a5, a6]
    }
+
+    fn get_label(&self) -> &str {
+        self.fields[1].as_slice()
+    }
 }
 
 impl tree::Record for ChessRecord {
@@ -217,6 +225,10 @@ impl tree::Record for ChessRecord {
    fn get_attribute_names(&self) -> Vec<&str> {
        vec!["bkblk","bknwy","bkon8","bkona","bkspr","bkxbq","bkxcr","bkxwp","blxwp","bxqsq","cntxt","dsopp","dwipd","hdchk","katri","mulch","qxmsq","r2ar8","reskd","reskr","rimmx","rkxwp","rxmsq","simpl","skach","skewr","skrxp","spcop","stlmt","thrsk","wkcti","wkna8","wknck","wkovl","wkpos","wtoeg"]
    }
+
+    fn get_label(&self) -> &str {
+        self.fields[36].as_slice()
+    }
 }
 
 impl<'a> tree::Record for &'a VotingRecord {
@@ -226,6 +238,10 @@ impl<'a> tree::Record for &'a VotingRecord {
 
     fn get_attribute_names(&self) -> Vec<&str> {
         self.get_attribute_names()
+    }
+
+    fn get_label(&self) -> &str {
+        self.get_label()
     }
 }
 
@@ -237,6 +253,11 @@ impl<'a> tree::Record for &'a MonkRecord {
     fn get_attribute_names(&self) -> Vec<&str> {
         self.get_attribute_names()
     }
+
+    fn get_label(&self) -> &str {
+        self.get_label()
+    }
+
 }
 
 impl<'a> tree::Record for &'a ChessRecord {
@@ -246,6 +267,10 @@ impl<'a> tree::Record for &'a ChessRecord {
 
     fn get_attribute_names(&self) -> Vec<&str> {
         self.get_attribute_names()
+    }
+
+    fn get_label(&self) -> &str {
+        self.get_label()
     }
 }
 

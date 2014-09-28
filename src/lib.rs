@@ -20,6 +20,7 @@ pub mod tree {
     pub trait Record {
         fn get_attribute(&self, attr_name: &str) -> &str;
         fn get_attribute_names(&self) -> Vec<&str>;
+        fn get_label(&self) -> &str;
     }    
 
     pub fn test<T: Record>(tree_vertex: &DecisionVertex, test_case: &T, label_attribute_name: &str) -> bool {
